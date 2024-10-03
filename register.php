@@ -18,39 +18,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     $user = $_POST['username'];
-    $pass = $_POST['password'];
+    $pass = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash the password
+    $email = $_POST['email'];
 
     // Prepared statement to prevent SQL injection
-    $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
+    $stmt = $conn->prepare("INSERT INTO users (username, password, email) VALUES (?, ?, ?)");
     if ($stmt === false) {
         die("Error preparing statement: " . $conn->error);
     }
 
-    $stmt->bind_param("s", $user);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    $stmt->bind_param("sss", $user, $pass, $email);
+    if ($stmt->execute()) {
+        echo "<script>alert('Registration successful! You can log in now.'); window.location.href='login.php';</script>";
+    } else {
+        $error = "Error: " . $stmt->error;
+    }
 
-    // Check for valid credentials
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        
-        // Handle the root user with an empty password
-        if ($user === 'root' && $pass === '') {
-            $_SESSION['username'] = $user; // Save username in session
-            header("Location: index.html"); // Redirect to home page
-            exit();
-        }
-
-        // Check for valid password (using password_verify for hashed passwords)
-        if (password_verify($pass, $row['password'])) {
-            $_SESSION['username'] = $user; // Save username in session
-            header("Location: index.html"); // Redirect to home page
-            exit();
-        }
-    } 
-
-    // If no match found
-    $error = "Invalid username/password";
     $stmt->close();
 }
 ?>
@@ -60,14 +43,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Register</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
     <div class="container mt-5">
-        <h1>Login</h1>
+        <h1>Register</h1>
         <?php if ($error) echo "<p class='text-danger'>$error</p>"; ?>
-        <form action="login.php" method="post">
+        <form action="register.php" method="post">
             <div class="form-group">
                 <label for="username">Username:</label>
                 <input type="text" class="form-control" id="username" name="username" required>
@@ -76,9 +59,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label for="password">Password:</label>
                 <input type="password" class="form-control" id="password" name="password" required>
             </div>
-            <button type="submit" class="btn btn-primary">Login</button>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Register</button>
         </form>
-        <p>New user? <a href="register.php">Register here</a></p>
+        <p>Already a user? <a href="login.php">Login here</a></p>
     </div>
     
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

@@ -1,0 +1,5 @@
+// scripts1.js
+document.getElementById('bike-form').onsubmit = function(e) {
+    e.preventDefault();
+    // Implement bike availability check and display results
+};
