@@ -1,5 +1,5 @@
 <?php
-session_start();
+session_start(); // Starting the session
 $conn = new mysqli("localhost", "root", "", "bikerental");
 
 // Check connection
@@ -22,10 +22,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
         if (password_verify($password, $row['password'])) {
-            // Login successful
+            // Login successful, store user information in session
             $_SESSION['loggedin'] = true;
-            $_SESSION['username'] = $username; // Storing the username in session
-            header('Location: home.php');
+            $_SESSION['username'] = $username;
+            header('Location: profile.php'); // Redirect to profile page after successful login
             exit();
         } else {
             // Incorrect password
@@ -40,38 +40,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Bike Rental</title>
-    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="register-container">
+    <div class="container mt-5">
         <h2>Login</h2>
 
         <?php if (!empty($loginError)): ?>
             <p style="color:red;"><?php echo $loginError; ?></p>
-        <?php elseif (!empty($loginSuccess)): ?>
-            <p style="color:green;"><?php echo $loginSuccess; ?></p>
         <?php endif; ?>
 
         <form action="login.php" method="POST">
             <div class="form-group">
                 <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
+                <input type="text" id="username" name="username" required class="form-control">
             </div>
             <div class="form-group">
                 <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
+                <input type="password" id="password" name="password" required class="form-control">
             </div>
-            <button type="submit">Login</button>
+            <button type="submit" class="btn btn-primary mt-3">Login</button>
         </form>
 
-        <p>New User? <a href="New Profile.php">Sign Up</a></p>
+        <p class="mt-3">New User? <a href="New Profile.php">Sign Up</a></p>
     </div>
 </body>
 </html>
