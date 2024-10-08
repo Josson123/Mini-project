@@ -88,5 +88,5 @@
     ?>
 
     <footer>
-        <p>© 2024 Bike Rental System. All rights reserved.</p>
+        <p>© 2024 RevRides Rental. All rights reserved.</p>
     </footer>
