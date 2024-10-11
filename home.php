@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,13 +6,14 @@
     <title>Bike Rental System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-     <?php
-       include("includes.php")
 
-     ?>  
-
-        <main class="container">
-         \<?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true): ?>
+    <?php
+       include("includes.php");
+    ?>  
+</head>
+<body>
+    <main class="container">
+        <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true): ?>
         <div class="alert alert-success mt-4" role="alert">
             Welcome, <?php echo $_SESSION['username']; ?>! You have successfully logged in.
         </div>
@@ -39,51 +39,45 @@
                         <option value="premium">Premium</option>
                     </select>
                 </div>
-                <button type="submit" class="btn btn-primary w-100">Check Availability</button>
+                <button type="button" class="btn btn-primary w-100" id="check-availability-btn">Check Availability</button>
             </form>
 
             <ul id="bikes-list" class="list-group mt-4"></ul>
 
-            <button id="book-btn" class="btn btn-success w-100 mt-3 hidden">Book Now</button>
+            <!-- Book Now button hidden by default -->
+            <button id="book-btn" class="btn btn-success w-100 mt-3" style="display:none;">Book Now</button>
         </section>
     </main>
 
-    <script >
-         
-        // Simulating user login status using localStorage (replace this logic with your backend login session)
-        let isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    <script>
+        // Check if user is logged in using session
+        let isLoggedIn = <?php echo isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true ? 'true' : 'false'; ?>;
 
         document.addEventListener("DOMContentLoaded", () => {
-            updateNav();
-
-            document.getElementById('login-link').addEventListener('click', function(e) {
-                if (isLoggedIn) {
-                    // Log out logic
-                    localStorage.setItem("isLoggedIn", "false");
-                    isLoggedIn = false;
-                    updateNav();
-                    e.preventDefault(); // Prevent redirect if logging out
+            // Handle Check Availability button click
+            document.getElementById('check-availability-btn').addEventListener('click', function() {
+                // Here you would check the availability logic (placeholder)
+                const availability = true; // Example: Always available for demonstration
+                
+                if (availability) {
+                    document.getElementById('bikes-list').innerHTML = '<li class="list-group-item">Bike is available</li>';
+                    document.getElementById('book-btn').style.display = 'block'; // Show Book Now button
+                } else {
+                    document.getElementById('bikes-list').innerHTML = '<li class="list-group-item">Bike is not available</li>';
                 }
             });
+
+            // Handle Book Now button click
+            document.getElementById('book-btn').addEventListener('click', function() {
+                if (!isLoggedIn) {
+                    alert("Login to book bike");
+                    return;
+                }
+
+                // If user is logged in, proceed with the booking (placeholder)
+                alert("Booking confirmed!");
+            });
         });
-
-        function updateNav() {
-            const loginLink = document.getElementById('login-link');
-            const profileLink = document.getElementById('profile-link');
-
-            if (isLoggedIn) {
-                loginLink.innerHTML = 'Logout';
-                loginLink.href = '#'; // Prevent navigation on logout
-                profileLink.classList.remove('disabled');
-                profileLink.setAttribute('aria-disabled', 'false');
-            } else {
-                loginLink.innerHTML = 'Login';
-                loginLink.href = 'login.php'; // Link to the login page
-                profileLink.classList.add('disabled');
-                profileLink.setAttribute('aria-disabled', 'true');
-            }
-        }
-    
     </script>
 </body>
 </html>
