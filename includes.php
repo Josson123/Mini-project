@@ -1,49 +1,99 @@
+<style>
+    /* Header Styling */
+    header {
+        background-color: #343a40; /* Dark background for header */
+        padding: 20px 0;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Subtle shadow for header depth */
+        position: sticky;
+        top: 0;
+        z-index: 1000; /* Keep header on top of other elements */
+    }
+
+    header .navbar-brand {
+        color: #ffc107; /* Bright yellow for brand name */
+        font-weight: bold;
+        font-size: 1.7rem;
+        letter-spacing: 0.05rem; /* Add some spacing for a polished look */
+    }
+
+    header .navbar-nav .nav-link {
+        color: white;
+        margin-right: 15px;
+        font-size: 1.1rem; /* Slightly larger font size for readability */
+        transition: color 0.3s ease;
+    }
+
+    header .navbar-nav .nav-link:hover {
+        color: #ffc107; /* Consistent hover color with brand and cards */
+    }
+
+    /* Main content styling */
+    main {
+        margin-top: 20px;
+        min-height: 70vh; /* Ensure enough space for content without pushing footer up */
+    }
+
+    /* Cards styling */
+    .card {
+        width: 100%;
+        max-width: 18rem; /* Limit the card width for a neat look */
+        margin-bottom: 30px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Add a soft shadow for card depth */
+        transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth animation */
+    }
+
+    .card:hover {
+        transform: translateY(-10px); /* Lift effect on hover */
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* Slightly stronger shadow on hover */
+    }
+
+    .card img {
+        border-radius: 5px 5px 0 0; /* Round the top corners of the image */
+        height: 150px;
+        object-fit: cover; /* Ensure the image fits well */
+    }
+
+    .card-title {
+        color: #343a40; /* Strong dark color for card titles */
+        font-size: 1.3rem;
+        font-weight: bold;
+    }
+
+    .card-text {
+        color: #6c757d; /* Muted color for card text */
+    }
+
+    /* Footer Styling */
+    footer {
+        background-color: #343a40;
+        color: white;
+        padding: 15px 0;
+        text-align: center;
+        font-size: 0.9rem;
+        border-top: 3px solid #ffc107; /* Consistent yellow accent */
+        margin-top: auto; /* Ensures footer stays at the bottom */
+    }
+
+    footer p {
+        margin: 0;
+    }
+
+    /* Media queries for responsiveness */
+    @media (min-width: 768px) {
+        .card-deck {
+            display: flex;
+            justify-content: space-around; /* Spread out cards evenly */
+        }
+    }
+
+    @media (max-width: 767px) {
+        .card {
+            margin-bottom: 20px; /* Add spacing between cards on small screens */
+        }
+    }
+</style>
 
 
- <style>
-        header {
-            background-color: #343a40;
-            padding: 20px 0;
-        }
-        header .navbar-brand {
-            color: white;
-            font-weight: bold;
-        }
-        header .navbar-nav .nav-link {
-            color: white;
-        }
-        header .navbar-nav .nav-link:hover {
-            color: #ffc107;
-        }
-        main {
-            margin-top: 50px;
-        }
-        .rental-form {
-            max-width: 600px;
-            margin: auto;
-            padding: 30px;
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .rental-form h2 {
-            margin-bottom: 20px;
-            text-align: center;
-            color: #343a40;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        footer {
-            background-color: #343a40;
-            color: white;
-            padding: 10px 0;
-            text-align: center;
-            position: fixed;
-            width: 100%;
-            bottom: 0;
-        }
-    </style>
 </head>
 <body>
 
@@ -88,5 +138,5 @@
     ?>
 
     <footer>
-        <p>© 2024 RevRides Rental. All rights reserved.</p>
+        <p>© 2024 Bike Rental System. All rights reserved.</p>
     </footer>
