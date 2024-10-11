@@ -6,7 +6,6 @@
     <title>Bike Rental System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
     <?php
        include("includes.php");
     ?>  
@@ -19,7 +18,7 @@
         </div>
         <?php endif; ?>
 
-        <!-- Other content of the page -->
+        <!-- Form Section -->
         <section class="rental-form">
             <h2>Rent a Bike</h2>
             <form id="bike-form">
@@ -42,10 +41,8 @@
                 <button type="button" class="btn btn-primary w-100" id="check-availability-btn">Check Availability</button>
             </form>
 
-            <ul id="bikes-list" class="list-group mt-4"></ul>
-
-            <!-- Book Now button hidden by default -->
-            <button id="book-btn" class="btn btn-success w-100 mt-3" style="display:none;">Book Now</button>
+            <!-- Cards Section -->
+            <div id="bikes-list" class="row mt-4"></div>
         </section>
     </main>
 
@@ -56,26 +53,46 @@
         document.addEventListener("DOMContentLoaded", () => {
             // Handle Check Availability button click
             document.getElementById('check-availability-btn').addEventListener('click', function() {
-                // Here you would check the availability logic (placeholder)
-                const availability = true; // Example: Always available for demonstration
-                
-                if (availability) {
-                    document.getElementById('bikes-list').innerHTML = '<li class="list-group-item">Bike is available</li>';
-                    document.getElementById('book-btn').style.display = 'block'; // Show Book Now button
-                } else {
-                    document.getElementById('bikes-list').innerHTML = '<li class="list-group-item">Bike is not available</li>';
-                }
-            });
+                // Simulate bike availability and display cards
+                const bikes = [
+                    { name: 'Mountain Bike', class: 'Mountain', price: '$10/day', img: 'bike1.jpg' },
+                    { name: 'Standard Bike', class: 'Standard', price: '$8/day', img: 'bike2.jpg' },
+                    { name: 'Premium Bike', class: 'Premium', price: '$15/day', img: 'bike3.jpg' }
+                ];
 
-            // Handle Book Now button click
-            document.getElementById('book-btn').addEventListener('click', function() {
-                if (!isLoggedIn) {
-                    alert("Login to book bike");
-                    return;
-                }
+                const bikeListDiv = document.getElementById('bikes-list');
+                bikeListDiv.innerHTML = ''; // Clear previous results
 
-                // If user is logged in, proceed with the booking (placeholder)
-                alert("Booking confirmed!");
+                bikes.forEach(bike => {
+                    const card = `
+                   <div class="col-md-6 col-lg-4 mb-4"> 
+                        <div class="card shadow-sm h-100" style="border-radius: 15px; overflow: hidden;"> 
+                             <img src="${bike.img}" class="card-img-top" alt="${bike.name}" style="height: 250px; object-fit: cover;"> 
+                             <div class="card-body d-flex flex-column"> 
+                              <h5 class="card-title">${bike.name}</h5>
+                              <p class="card-text mb-2">Class: ${bike.class}</p> 
+                              <p class="card-text mb-4">Price: $${bike.price}</p> 
+                              <button class="btn btn-success mt-auto book-now-btn" data-bike="${bike.name}">Book Now</button> 
+                              </div>
+                        </div>
+                   </div
+
+
+                    `;
+                    bikeListDiv.innerHTML += card;
+                });
+
+                // Handle Book Now button click for each card
+                document.querySelectorAll('.book-now-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        if (!isLoggedIn) {
+                            alert("Login to book bike");
+                        } else {
+                            const bikeName = this.getAttribute('data-bike');
+                            alert("Booking confirmed for " + bikeName);
+                        }
+                    });
+                });
             });
         });
     </script>
