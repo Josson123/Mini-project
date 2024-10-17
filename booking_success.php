@@ -1,9 +1,6 @@
-<?php
-       include("includes.php");
-
-?>
-
-
+<?php  
+   include("includes.php");
+ ?>  
 <!DOCTYPE html>
 <html lang="en">
 <head>
