@@ -1,3 +1,6 @@
+<?php
+ include("includes.php");
+?> 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,20 +12,10 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>Bike Rental System</h1>
-        <nav>
-            <ul id="nav-list">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="login.html">Login</a></li>
-                <li><a href="profile.html">Profile</a></li>
-            </ul>
-        </nav>
-    </header>
-
+   
     <main>
         <section class="login-form">
-            <h2>Login</h2>
+            <h2>Sign up</h2>
             <form action="insert.php" method="POST">
 
             
@@ -44,10 +37,7 @@
         </section>
     </main>
 
-    <footer>
-        <p>© 2024 Bike Rental System. All rights reserved.</p>
-    </footer>
-
+   
    <!---- <script src="scripts1.php"></script>-->
 </body>
 </html>
