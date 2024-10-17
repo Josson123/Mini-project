@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['email'] = $row['email'];
             $_SESSION['phone_no'] = $row['phone_no'];
 
-            header('Location: profile.php');  // Redirect to profile page after login
+            header('Location: home.php');  // Redirect to home page after login
             exit();
         } else {
             $loginError = "Incorrect password.";
@@ -73,3 +73,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 </body>
 </html>
+
