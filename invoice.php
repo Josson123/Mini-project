@@ -24,19 +24,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Calculate number of days
     $pickup = new DateTime($pickup_date);
     $dropoff = new DateTime($dropoff_date);
-    $interval = $pickup->diff($dropoff);
-    $num_days = $interval->days;
+    
+    // Calculate days difference, add 1 day if dates are different
+    if ($pickup == $dropoff) {
+        $num_days = 1;  // Same day is counted as one day
+    } else {
+        $interval = $pickup->diff($dropoff);
+        $num_days = $interval->days + 1; // Add 1 day for inclusive booking
+    }
 
     // Calculate total price
     $total_price = $num_days * $bike['price'];
 }
 
-// If the booking confirmation button is pressed
 if (isset($_POST['confirm_booking'])) {
-    $bike_no = $_POST['bike_no'];
-    $pickup_date = $_POST['pickup_date'];
-    $dropoff_date = $_POST['dropoff_date'];
-
     // Update bike status to booked
     $update_query = "UPDATE bike SET booking_status = 1 WHERE bike_no = ?";
     $stmt = $conn->prepare($update_query);
@@ -44,17 +45,16 @@ if (isset($_POST['confirm_booking'])) {
     $stmt->execute();
 
     // Insert into booking table
-    $insert_query = "INSERT INTO booking (pickup_date, dropoff_date, mail, bike_no) 
-                     VALUES (?, ?, ?, ?)";
+    $insert_query = "INSERT INTO booking (pickup_date, dropoff_date,  bike_no) 
+                     VALUES (?, ?, ?)";
     $stmt = $conn->prepare($insert_query);
-    $stmt->bind_param("sssi", $pickup_date, $dropoff_date, $_SESSION['email'], $bike_no);
+    $stmt->bind_param("ssi", $pickup_date, $dropoff_date, $bike_no);
     $stmt->execute();
 
-     // Redirect to booking success page
-     header("Location: booking_success.php");
-     exit;
+    // Redirect to booking success page
+    header("Location: booking_success.php");
+    exit;
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -67,31 +67,28 @@ if (isset($_POST['confirm_booking'])) {
 </head>
 <body>
     <main class="container mt-5">
-        <h2>Invoice</h2>
+        <h2><center><b><u>INVOICE</u></b></center></h2>
         <div class="card">
-            <img src="images/<?php echo htmlspecialchars($bike['bike_img']); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($bike['bike_number']); ?>" style="height: 200px; object-fit: cover;">
+            <!-- Display the image from the stored path -->
+            <img src="<?php echo isset($bike['bike_img']) ? htmlspecialchars($bike['bike_img']) : 'default.jpg'; ?>" class="card-img-top" alt="<?php echo isset($bike['bike_name']) ? htmlspecialchars($bike['bike_name']) : 'No bike'; ?>" style="height: 300px; object-fit: contain;border-radius: 50%;">
             <div class="card-body">
-                <h5 class="card-title"><?php echo htmlspecialchars($bike['bike_name']); ?></h5>
-                <p class="card-text">Class: <?php echo htmlspecialchars($bike['bike_class']); ?></p>
-                <p class="card-text">Brand: <?php echo htmlspecialchars($bike['brand']); ?></p>
-                <p class="card-text">Price per day: $<?php echo htmlspecialchars($bike['price']); ?></p>
-                <p class="card-text">Total Rent for <?php echo $num_days; ?> days: <strong>$<?php echo $total_price; ?></strong></p>
+                 <center>
+                <h5 class="card-title"><?php echo isset($bike['bike_name']) ? htmlspecialchars($bike['bike_name']) : 'Unknown Bike'; ?></h5>
+                <p class="card-text"><b>Class:</b> <?php echo isset($bike['bike_class']) ? htmlspecialchars($bike['bike_class']) : 'N/A'; ?></p>
+                <p class="card-text"><b>Brand:</b> <?php echo isset($bike['brand']) ? htmlspecialchars($bike['brand']) : 'N/A'; ?></p>
+                <p class="card-text"><b>Price per day:</b> $<?php echo isset($bike['price']) ? htmlspecialchars($bike['price']) : '0'; ?></p>
+                <p class="card-text"><b>Total Rent for <?php echo $num_days; ?> days:</b> <strong>$<?php echo $total_price; ?></strong></p>
+                 </center>
             </div>
         </div>
 
         <!-- Confirm Booking Button -->
         <form method="POST" action="invoice.php">
-            <!-- Hidden inputs to pass the bike and booking details -->
             <input type="hidden" name="bike_no" value="<?php echo $bike_no; ?>">
             <input type="hidden" name="pickup_date" value="<?php echo $pickup_date; ?>">
             <input type="hidden" name="dropoff_date" value="<?php echo $dropoff_date; ?>">
             <button type="submit" name="confirm_booking" class="btn btn-success mt-4 w-100">Confirm Booking</button>
         </form>
-
-        <!-- Success message will be shown here after booking confirmation -->
-         <?php //if (isset($_POST['confirm_booking'])): ?>
-          <!--<div class="alert alert-success mt-4">Booking confirmed, thank you for choosing RevRides Rental!</div>-->
-        <?php //endif; ?>
     </main>
 </body>
 </html>
