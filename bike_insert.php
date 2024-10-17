@@ -7,7 +7,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$uploadDir = 'D:\XAMPP\htdocs\New folder\images\local';
+$uploadDir = 'images\local';
 $uploadError = "";
 
 // Handle form submission
