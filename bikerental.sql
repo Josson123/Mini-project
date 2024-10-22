@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 15, 2024 at 03:17 PM
+-- Generation Time: Oct 22, 2024 at 09:18 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -37,7 +37,7 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`admin`, `password`) VALUES
-('admin', 'admin1234');
+('admin', 'admin@123');
 
 -- --------------------------------------------------------
 
@@ -61,8 +61,11 @@ CREATE TABLE `bike` (
 --
 
 INSERT INTO `bike` (`sl_no`, `bike_no`, `bike_name`, `bike_class`, `booking_status`, `bike_img`, `brand`, `price`) VALUES
-(2, 100, 'splendor', 'standard', 0, 'D:\\XAMPP\\htdocs\\New folder\\images\\localsplendor.jpeg', 'Hero Honda', 30.00),
-(1, 4656, 'access', 'standard', 0, 'D:\\XAMPP\\htdocs\\New folder\\images\\localaccess.jpg', 'suzuki', 20.00);
+(2, 100, 'splendor', 'standard', 1, 'images\\local\\splendor.jpeg', 'Hero Honda', 30.00),
+(0, 200, 'Activa 6g', 'standard', 0, '../images/localActiva 6g.jpg', 'Honda', 35.00),
+(0, 3010, 'Bullet 350', 'premium', 0, '../images/localBullet 350.jpg', 'Royal Enfield', 50.00),
+(1, 4656, 'access', 'standard', 1, 'images\\local\\access.jpg', 'suzuki', 20.00),
+(0, 6060, 'Himalayan', 'mountain', 0, '../images/localHimalayan.jpg', 'Royal Enfield', 45.00);
 
 -- --------------------------------------------------------
 
@@ -74,9 +77,17 @@ CREATE TABLE `booking` (
   `booking_no` int(5) UNSIGNED NOT NULL,
   `pickup_date` datetime NOT NULL,
   `dropoff_date` datetime NOT NULL,
-  `mail` varchar(50) NOT NULL COMMENT 'user mail\r\n',
-  `bike_no` int(3) UNSIGNED NOT NULL
+  `user_name` varchar(50) NOT NULL COMMENT 'user name from user table\r\n\r\n',
+  `bike_no` int(3) UNSIGNED NOT NULL,
+  `booking_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `booking`
+--
+
+INSERT INTO `booking` (`booking_no`, `pickup_date`, `dropoff_date`, `user_name`, `bike_no`, `booking_date`) VALUES
+(6, '2024-10-22 00:00:00', '2024-10-23 00:00:00', 'ammavan', 100, '2024-10-22');
 
 -- --------------------------------------------------------
 
@@ -96,7 +107,6 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`user_name`, `email`, `phone_no`, `password`) VALUES
-('admin', 'user@example.com', '7894561230', '$2y$10$of7NgsomKS0m4fENnqlW5uRa9/4xOwo0kL6M5hdNHrIY6W1LpmcZy'),
 ('ammavan', 'ammavan@gmail.com', '8574123157', '$2y$10$nac8FwWM4x3M22xg8UqN9u.EA1dxXT2I3bV4AnPOFnLUrBKiS/JL6'),
 ('jagan', 'jagan@gmail.com', '', '$2y$10$RE0fJVz7QH4GFb9BBnh15euumnBSxszzmAgRKB27W1T6sDuAgd7oe');
 
@@ -115,7 +125,8 @@ ALTER TABLE `bike`
 --
 ALTER TABLE `booking`
   ADD PRIMARY KEY (`booking_no`),
-  ADD KEY `test` (`bike_no`);
+  ADD KEY `test` (`bike_no`),
+  ADD KEY `dest` (`user_name`);
 
 --
 -- Indexes for table `user`
@@ -131,7 +142,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `booking_no` int(5) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `booking_no` int(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables
@@ -141,7 +152,7 @@ ALTER TABLE `booking`
 -- Constraints for table `booking`
 --
 ALTER TABLE `booking`
-  ADD CONSTRAINT `test` FOREIGN KEY (`bike_no`) REFERENCES `bike` (`bike_no`);
+  ADD CONSTRAINT `dest` FOREIGN KEY (`user_name`) REFERENCES `user` (`user_name`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
